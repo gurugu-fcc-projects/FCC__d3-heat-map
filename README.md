@@ -1,1 +1,1 @@
-# FCC D3 Heat Map
+# D3 Heat Map

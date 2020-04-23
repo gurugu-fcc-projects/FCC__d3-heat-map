@@ -3,7 +3,7 @@ const url =
   "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json";
 
 // Dimensions
-const margin = { top: 20, right: 20, bottom: 100, left: 70 };
+const margin = { top: 40, right: 20, bottom: 100, left: 70 };
 const height = 600 - margin.top - margin.bottom;
 const width = 1000 - margin.left - margin.right;
 const cellWidth = 20;
@@ -43,42 +43,55 @@ d3.json(url)
     const minYear = d3.min(data.monthlyVariance, (d) => d.year);
 
     // Y Scale & Axis
-    // const yScale = d3
-    //   .scaleLinear()
-    //   .domain([0, 11])
-    //   .range([cellSize * months.length, 0]);
+    const yScale = d3
+      .scaleBand()
+      .domain(months)
+      .range([cellHeight * months.length, 0]);
 
-    // const yAxis = d3.axisLeft(yScale).tickFormat((d) => months[d - 1]);
+    const yAxis = d3
+      .axisLeft(yScale)
+      .tickFormat((d) => d)
+      .tickSize(0);
 
-    // chart.append("g").call(yAxis);
+    chart.append("g").call(yAxis);
 
     // X Scale & Axis
-    // const xScale = d3
-    //   .scaleLinear()
-    //   .domain(d3.extent(data.monthlyVariance, (d) => d.year))
-    //   .range([0, width]);
+    const xScale = d3
+      .scaleLinear()
+      .domain(d3.extent(data.monthlyVariance, (d) => d.year))
+      .range([0, width]);
 
-    // const xAxis = d3.axisBottom(xScale).tickFormat((d) => String(d));
+    const xAxis = d3.axisBottom(xScale).tickFormat((d) => String(d));
 
-    // chart
-    //   .append("g")
-    //   .call(xAxis)
-    //   .attr(
-    //     "transform",
-    //     `translate(0, ${height - margin.top - margin.bottom})`
-    //   );
+    chart
+      .append("g")
+      .call(xAxis)
+      .attr("transform", `translate(0, ${height + margin.top / 2})`);
 
     // Month labels
-    const monthLabels = chart
-      .selectAll("text")
-      .data(months)
-      .enter()
-      .append("text")
-      .text((d) => d)
-      .attr("x", -10)
-      .attr("y", (d, i) => i * cellHeight + cellHeight / 1.5)
-      .style("text-anchor", "end")
-      .style("fill", "white");
+    // const monthLabels = chart
+    //   .selectAll(".month-label")
+    //   .data(months)
+    //   .enter()
+    //   .append("text")
+    //   .text((d) => d)
+    //   .attr("x", -10)
+    //   .attr("y", (d, i) => i * cellHeight + cellHeight / 1.7)
+    //   .style("text-anchor", "end")
+    //   .style("fill", "white");
+
+    // Year labels
+    // const yearLabels = chart
+    //   .selectAll(".year-label")
+    //   .data(data.monthlyVariance)
+    //   .enter()
+    //   .append("text")
+    //   .text((d) => d.year)
+    //   .attr("x", (d, i) => i * cellWidth + cellWidth / 1.7)
+    //   .attr("y", 0)
+    // .attr("transform", "rotate(-65)")
+    // .style("text-anchor", "start")
+    // .style("fill", "white");
 
     // Data cells
     const heatMap = chart

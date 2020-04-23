@@ -6,7 +6,8 @@ const url =
 const margin = { top: 20, right: 20, bottom: 100, left: 70 };
 const height = 600 - margin.top - margin.bottom;
 const width = 1000 - margin.left - margin.right;
-const cellSize = 20;
+const cellWidth = 20;
+const cellHeight = 40;
 
 // Helpers
 const months = [
@@ -40,25 +41,24 @@ d3.json(url)
   .then((data) => {
     console.log(data);
     const minYear = d3.min(data.monthlyVariance, (d) => d.year);
-    console.log(minYear);
 
     // Y Scale & Axis
-    const yScale = d3
-      .scaleLinear()
-      .domain([0, 11])
-      .range([cellSize * months.length, 0]);
+    // const yScale = d3
+    //   .scaleLinear()
+    //   .domain([0, 11])
+    //   .range([cellSize * months.length, 0]);
 
-    const yAxis = d3.axisLeft(yScale).tickFormat((d) => months[d - 1]);
+    // const yAxis = d3.axisLeft(yScale).tickFormat((d) => months[d - 1]);
 
     // chart.append("g").call(yAxis);
 
     // X Scale & Axis
-    const xScale = d3
-      .scaleLinear()
-      .domain(d3.extent(data.monthlyVariance, (d) => d.year))
-      .range([0, width]);
+    // const xScale = d3
+    //   .scaleLinear()
+    //   .domain(d3.extent(data.monthlyVariance, (d) => d.year))
+    //   .range([0, width]);
 
-    const xAxis = d3.axisBottom(xScale).tickFormat((d) => String(d));
+    // const xAxis = d3.axisBottom(xScale).tickFormat((d) => String(d));
 
     // chart
     //   .append("g")
@@ -68,16 +68,28 @@ d3.json(url)
     //     `translate(0, ${height - margin.top - margin.bottom})`
     //   );
 
+    // Month labels
+    const monthLabels = chart
+      .selectAll("text")
+      .data(months)
+      .enter()
+      .append("text")
+      .text((d) => d)
+      .attr("x", -10)
+      .attr("y", (d, i) => i * cellHeight + cellHeight / 1.5)
+      .style("text-anchor", "end")
+      .style("fill", "white");
+
     // Data cells
-    chart
+    const heatMap = chart
       .selectAll("rect")
       .data(data.monthlyVariance)
       .enter()
       .append("rect")
-      .attr("width", cellSize)
-      .attr("height", cellSize)
-      .attr("x", (d) => (d.year - minYear) * cellSize)
-      .attr("y", (d) => (d.month - 1) * cellSize)
+      .attr("width", cellWidth)
+      .attr("height", cellHeight)
+      .attr("x", (d) => (d.year - minYear) * cellWidth)
+      .attr("y", (d) => (d.month - 1) * cellHeight)
       .attr("rx", 4)
       .attr("ry", 4)
       .style("fill", "tomato");

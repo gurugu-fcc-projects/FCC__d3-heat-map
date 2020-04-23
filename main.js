@@ -56,7 +56,7 @@ d3.json(url)
       .domain(d3.extent(data.monthlyVariance, (d) => d.year))
       .range([0, width]);
 
-    const xAxis = d3.axisBottom(xScale);
+    const xAxis = d3.axisBottom(xScale).tickFormat((d) => String(d));
 
     chart
       .append("g")

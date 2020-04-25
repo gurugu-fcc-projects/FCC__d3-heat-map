@@ -28,10 +28,10 @@ d3.json(url)
     const cellWidth = 5;
     const cellHeight = 40;
     const height = 600 - margin.top - margin.bottom;
-    // const width = 1200 - margin.left - margin.right;
     const width = cellWidth * Math.ceil(data.monthlyVariance.length / 12);
 
     const minYear = d3.min(data.monthlyVariance, (d) => d.year);
+    const variances = data.monthlyVariance.map((d) => d.variance);
 
     // SVG & Chart
     const svg = d3
@@ -43,6 +43,25 @@ d3.json(url)
     const chart = svg
       .append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+    // Color Scale
+    const interpolateGnBu = () => {
+      return d3.interpolateRgbBasis([
+        "#f7fcf0",
+        "#e0f3db",
+        "#ccebc5",
+        "#a8ddb5",
+        "#7bccc4",
+        "#4eb3d3",
+        "#2b8cbe",
+        "#0868ac",
+        "#084081",
+      ]);
+    };
+
+    const colorScale = d3
+      .scaleSequential(interpolateGnBu())
+      .domain(d3.extent(data.monthlyVariance, (d) => d.variance));
 
     // Y Scale & Axis
     const yScale = d3
@@ -60,9 +79,7 @@ d3.json(url)
 
     // X Scale & Axis
     const xScale = d3
-      // .scaleLinear()
       .scaleBand()
-      // .domain(d3.extent(data.monthlyVariance, (d) => d.year))
       .domain(data.monthlyVariance.map((d) => d.year))
       .range([0, width]);
 
@@ -79,31 +96,6 @@ d3.json(url)
       .call(xAxis)
       .attr("transform", `translate(0, ${height + margin.top / 2})`);
 
-    // Month labels
-    // const monthLabels = chart
-    //   .selectAll(".month-label")
-    //   .data(months)
-    //   .enter()
-    //   .append("text")
-    //   .text((d) => d)
-    //   .attr("x", -10)
-    //   .attr("y", (d, i) => i * cellHeight + cellHeight / 1.7)
-    //   .style("text-anchor", "end")
-    //   .style("fill", "white");
-
-    // Year labels
-    // const yearLabels = chart
-    //   .selectAll(".year-label")
-    //   .data(data.monthlyVariance)
-    //   .enter()
-    //   .append("text")
-    //   .text((d) => d.year)
-    //   .attr("x", (d, i) => i * cellWidth + cellWidth / 1.7)
-    //   .attr("y", 0)
-    // .attr("transform", "rotate(-65)")
-    // .style("text-anchor", "start")
-    // .style("fill", "white");
-
     // Data cells
     const heatMap = chart
       .selectAll("rect")
@@ -116,6 +108,7 @@ d3.json(url)
       .attr("y", (d) => (d.month - 1) * cellHeight)
       .attr("rx", 4)
       .attr("ry", 4)
-      .style("fill", "tomato");
+      // .style("fill", "tomato");
+      .style("fill", (d) => colorScale(d.variance));
   })
   .catch((error) => console.log(error));

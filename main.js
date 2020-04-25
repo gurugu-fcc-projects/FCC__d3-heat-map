@@ -51,9 +51,10 @@ d3.json(url)
     const yAxis = d3
       .axisLeft(yScale)
       .tickFormat((d) => d)
-      .tickSize(0);
+      .tickSize(0)
+      .tickPadding(10);
 
-    chart.append("g").call(yAxis);
+    chart.append("g").attr("class", "axis").call(yAxis);
 
     // X Scale & Axis
     const xScale = d3
@@ -61,10 +62,15 @@ d3.json(url)
       .domain(d3.extent(data.monthlyVariance, (d) => d.year))
       .range([0, width]);
 
-    const xAxis = d3.axisBottom(xScale).tickFormat((d) => String(d));
+    const xAxis = d3
+      .axisBottom(xScale)
+      .tickFormat((d) => String(d))
+      .tickSize(0)
+      .tickPadding(10);
 
     chart
       .append("g")
+      .attr("class", "axis")
       .call(xAxis)
       .attr("transform", `translate(0, ${height + margin.top / 2})`);
 

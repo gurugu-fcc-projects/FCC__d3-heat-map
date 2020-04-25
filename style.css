@@ -84,10 +84,12 @@ body {
   font-weight: 100;
 }
 
-.axis text,
+.axis text {
+  stroke: var(--text-color-2);
+}
 .axis path,
 .axis line {
-  stroke: var(--text-color-2);
+  stroke: var(--bg-color);
 }
 
 .axis text {

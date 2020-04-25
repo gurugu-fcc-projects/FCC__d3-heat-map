@@ -2,13 +2,6 @@
 const url =
   "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json";
 
-// Dimensions
-const margin = { top: 40, right: 20, bottom: 100, left: 70 };
-const height = 600 - margin.top - margin.bottom;
-const width = 1000 - margin.left - margin.right;
-const cellWidth = 20;
-const cellHeight = 40;
-
 // Helpers
 const months = [
   "Jan",
@@ -25,22 +18,31 @@ const months = [
   "Dec",
 ];
 
-// SVG & Chart
-const svg = d3
-  .select(".content")
-  .append("svg")
-  .attr("height", height + margin.top + margin.bottom)
-  .attr("width", width + margin.left + margin.right);
-
-const chart = svg
-  .append("g")
-  .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
 // Load & display data
 d3.json(url)
   .then((data) => {
     console.log(data);
+
+    // Dimensions
+    const margin = { top: 40, right: 20, bottom: 100, left: 70 };
+    const cellWidth = 5;
+    const cellHeight = 40;
+    const height = 600 - margin.top - margin.bottom;
+    // const width = 1200 - margin.left - margin.right;
+    const width = cellWidth * Math.ceil(data.monthlyVariance.length / 12);
+
     const minYear = d3.min(data.monthlyVariance, (d) => d.year);
+
+    // SVG & Chart
+    const svg = d3
+      .select(".content")
+      .append("svg")
+      .attr("height", height + margin.top + margin.bottom)
+      .attr("width", width + margin.left + margin.right);
+
+    const chart = svg
+      .append("g")
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
     // Y Scale & Axis
     const yScale = d3
@@ -58,12 +60,15 @@ d3.json(url)
 
     // X Scale & Axis
     const xScale = d3
-      .scaleLinear()
-      .domain(d3.extent(data.monthlyVariance, (d) => d.year))
+      // .scaleLinear()
+      .scaleBand()
+      // .domain(d3.extent(data.monthlyVariance, (d) => d.year))
+      .domain(data.monthlyVariance.map((d) => d.year))
       .range([0, width]);
 
     const xAxis = d3
       .axisBottom(xScale)
+      .tickValues(xScale.domain().filter((year) => year % 10 === 0))
       .tickFormat((d) => String(d))
       .tickSize(0)
       .tickPadding(10);

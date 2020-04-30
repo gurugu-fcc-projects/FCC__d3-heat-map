@@ -24,7 +24,7 @@ d3.json(url)
     console.log(data);
 
     // Dimensions
-    const margin = { top: 40, right: 20, bottom: 100, left: 70 };
+    const margin = { top: 40, right: 20, bottom: 120, left: 70 };
     const cellWidth = 5;
     const cellHeight = 40;
     const height = 600 - margin.top - margin.bottom;
@@ -34,6 +34,8 @@ d3.json(url)
     const maxVariance = d3.max(data.monthlyVariance, (d) => d.variance);
     const minVariance = d3.min(data.monthlyVariance, (d) => d.variance);
     const maxMaxVariance = maxVariance + Math.abs(minVariance);
+    const baseTemperature = data.baseTemperature;
+
     console.log("maxVariance:", maxVariance);
     console.log("minVariance:", minVariance);
     console.log("maxMaxVariance:", maxMaxVariance);
@@ -147,6 +149,7 @@ d3.json(url)
     });
 
     console.log(categories);
+    // Legend - graph
     const legendMap = legend
       .selectAll("rect")
       .data(categories)
@@ -156,5 +159,15 @@ d3.json(url)
       .attr("height", legendItemHeight)
       .attr("x", (d, i) => legendItemWidth * i)
       .attr("fill", (d) => d.color);
+
+    // Legend -- text
+    const legendText = legend
+      .selectAll("text")
+      .data(categories)
+      .enter()
+      .append("text")
+      .attr("y", legendItemHeight * 2)
+      .attr("x", (d, i) => legendItemWidth * i)
+      .text((d) => (d.lowerBound + minVariance + baseTemperature).toFixed(2));
   })
   .catch((error) => console.log(error));

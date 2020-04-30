@@ -32,7 +32,9 @@ d3.json(url)
 
     const minYear = d3.min(data.monthlyVariance, (d) => d.year);
     const maxVariance = d3.max(data.monthlyVariance, (d) => d.variance);
+    const minVariance = d3.min(data.monthlyVariance, (d) => d.variance);
     console.log("maxVariance:", maxVariance);
+    console.log("minVariance:", minVariance);
 
     // SVG & Chart
     const svg = d3

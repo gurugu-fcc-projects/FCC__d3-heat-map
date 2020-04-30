@@ -118,9 +118,12 @@ d3.json(url)
       .style("fill", (d) => colorScale(d.variance));
 
     // Legend
-    const legend = chart
+    const legend = svg
       .append("g")
-      .attr("transform", `translate(0, ${height + margin.top * 2})`);
+      .attr(
+        "transform",
+        `translate(${margin.left}, ${height + margin.top * 3})`
+      );
 
     const categoriesCount = 10;
     const legendItemWidth = 40;

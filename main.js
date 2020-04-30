@@ -35,6 +35,10 @@ d3.json(url)
     const minVariance = d3.min(data.monthlyVariance, (d) => d.variance);
     console.log("maxVariance:", maxVariance);
     console.log("minVariance:", minVariance);
+    console.log(
+      "maxVariance + minVariance:",
+      maxVariance + Math.abs(minVariance)
+    );
 
     // SVG & Chart
     const svg = d3
@@ -119,6 +123,9 @@ d3.json(url)
       .attr("transform", `translate(0, ${height + margin.top * 2})`);
 
     const categoriesCount = 10;
+    const legendItemWidth = 40;
+    const legendItemHeight = 15;
+
     const categories = [...Array(categoriesCount)].map((_, i) => {
       const upperBound = (maxVariance / categoriesCount) * (i + 1);
       const lowerBound = (maxVariance / categoriesCount) * i;
@@ -136,9 +143,9 @@ d3.json(url)
       .data(categories)
       .enter()
       .append("rect")
-      .attr("width", 40)
-      .attr("height", 15)
-      .attr("x", (d, i) => 40 * i)
+      .attr("width", legendItemWidth)
+      .attr("height", legendItemHeight)
+      .attr("x", (d, i) => legendItemWidth * i)
       .attr("fill", (d) => d.color);
   })
   .catch((error) => console.log(error));

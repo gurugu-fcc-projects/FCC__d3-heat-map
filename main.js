@@ -33,12 +33,10 @@ d3.json(url)
     const minYear = d3.min(data.monthlyVariance, (d) => d.year);
     const maxVariance = d3.max(data.monthlyVariance, (d) => d.variance);
     const minVariance = d3.min(data.monthlyVariance, (d) => d.variance);
+    const maxMaxVariance = maxVariance + Math.abs(minVariance);
     console.log("maxVariance:", maxVariance);
     console.log("minVariance:", minVariance);
-    console.log(
-      "maxVariance + minVariance:",
-      maxVariance + Math.abs(minVariance)
-    );
+    console.log("maxMaxVariance:", maxMaxVariance);
 
     // SVG & Chart
     const svg = d3
@@ -65,10 +63,18 @@ d3.json(url)
         "#084081",
       ]);
     };
-
+    console.log(
+      "colorScale min-max:",
+      d3.extent(data.monthlyVariance, (d) => d.variance + Math.abs(minVariance))
+    );
     const colorScale = d3
       .scaleSequential(interpolateGnBu())
-      .domain(d3.extent(data.monthlyVariance, (d) => d.variance));
+      .domain(
+        d3.extent(
+          data.monthlyVariance,
+          (d) => d.variance + Math.abs(minVariance)
+        )
+      );
 
     // Y Scale & Axis
     const yScale = d3
@@ -103,7 +109,7 @@ d3.json(url)
       .call(xAxis)
       .attr("transform", `translate(0, ${height + margin.top / 2})`);
 
-    // Data cells
+    // Heatmap
     const heatMap = chart
       .selectAll("rect")
       .data(data.monthlyVariance)
@@ -115,7 +121,7 @@ d3.json(url)
       .attr("y", (d) => (d.month - 1) * cellHeight)
       .attr("rx", 4)
       .attr("ry", 4)
-      .style("fill", (d) => colorScale(d.variance));
+      .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)));
 
     // Legend
     const legend = svg
@@ -130,13 +136,13 @@ d3.json(url)
     const legendItemHeight = 15;
 
     const categories = [...Array(categoriesCount)].map((_, i) => {
-      const upperBound = (maxVariance / categoriesCount) * (i + 1);
-      const lowerBound = (maxVariance / categoriesCount) * i;
+      const upperBound = (maxMaxVariance / categoriesCount) * (i + 1);
+      const lowerBound = (maxMaxVariance / categoriesCount) * i;
 
       return {
         upperBound,
         lowerBound,
-        color: colorScale(upperBound / maxVariance),
+        color: colorScale(upperBound),
       };
     });
 

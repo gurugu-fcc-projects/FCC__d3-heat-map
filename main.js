@@ -31,7 +31,8 @@ d3.json(url)
     const width = cellWidth * Math.ceil(data.monthlyVariance.length / 12);
 
     const minYear = d3.min(data.monthlyVariance, (d) => d.year);
-    const variances = data.monthlyVariance.map((d) => d.variance);
+    const maxVariance = d3.max(data.monthlyVariance, (d) => d.variance);
+    console.log("maxVariance:", maxVariance);
 
     // SVG & Chart
     const svg = d3
@@ -108,7 +109,34 @@ d3.json(url)
       .attr("y", (d) => (d.month - 1) * cellHeight)
       .attr("rx", 4)
       .attr("ry", 4)
-      // .style("fill", "tomato");
       .style("fill", (d) => colorScale(d.variance));
+
+    // Legend
+    const legend = chart
+      .append("g")
+      .attr("transform", `translate(0, ${height + margin.top * 2})`);
+
+    const categoriesCount = 10;
+    const categories = [...Array(categoriesCount)].map((_, i) => {
+      const upperBound = (maxVariance / categoriesCount) * (i + 1);
+      const lowerBound = (maxVariance / categoriesCount) * i;
+
+      return {
+        upperBound,
+        lowerBound,
+        color: colorScale(upperBound / maxVariance),
+      };
+    });
+
+    console.log(categories);
+    const legendMap = legend
+      .selectAll("rect")
+      .data(categories)
+      .enter()
+      .append("rect")
+      .attr("width", 40)
+      .attr("height", 15)
+      .attr("x", (d, i) => 40 * i)
+      .attr("fill", (d) => d.color);
   })
   .catch((error) => console.log(error));

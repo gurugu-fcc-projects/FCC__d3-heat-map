@@ -79,6 +79,7 @@ body {
   fill: var(--circle-color-doping-hover);
 } */
 .cell {
+  stroke-width: 2px;
   /* fill: var(--bg-color);
   transition: fill 0.3s; */
 }

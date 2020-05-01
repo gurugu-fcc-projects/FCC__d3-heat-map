@@ -137,7 +137,12 @@ d3.json(url)
         .duration(200)
         .style("opacity", 0.9);
 
-      d3.select(this).transition().duration(100).style("fill", "#2b8cbe");
+      d3.select(this)
+        .transition()
+        .duration(100)
+        // .style("fill", "#2b8cbe")
+        .style("fill", "rgb(44, 44, 44)")
+        .style("stroke", "#fff");
       // d3.select(this)
       //   .transition()
       //   .duration(100)
@@ -151,8 +156,8 @@ d3.json(url)
       d3.select(this)
         .transition()
         .duration(100)
-        .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)));
-      // .style("stroke", "none");
+        .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)))
+        .style("stroke", "none");
     };
 
     // Heatmap
@@ -192,10 +197,22 @@ d3.json(url)
         upperBound,
         lowerBound,
         color: colorScale(upperBound),
+        selected: true,
       };
     });
 
+    const toggle = (legend) => {
+      const { upperBound, lowerBound, selected } = legend;
+
+      const selectedData = data.monthlyVariance.filter((dataItem) => {
+        dataItem.variance > lowerBound;
+      });
+
+      console.log("toggling");
+    };
+
     console.log(categories);
+
     // Legend - graph
     const legendMap = legend
       .selectAll("rect")
@@ -206,7 +223,8 @@ d3.json(url)
       .attr("width", legendItemWidth)
       .attr("height", legendItemHeight)
       .attr("x", (d, i) => legendItemWidth * i)
-      .attr("fill", (d) => d.color);
+      .attr("fill", (d) => d.color)
+      .on("click", toggle);
 
     // Legend -- text
     const legendText = legend

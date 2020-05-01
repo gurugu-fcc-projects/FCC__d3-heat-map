@@ -71,13 +71,21 @@ body {
   transition: fill 0.5s;
 } */
 
-.dot:hover {
+/* .dot:hover {
   fill: var(--circle-color-hover);
 }
 
 .dot.doping:hover {
   fill: var(--circle-color-doping-hover);
+} */
+.cell {
+  /* fill: var(--bg-color);
+  transition: fill 0.3s; */
 }
+
+/* .cell:hover {
+  fill: red;
+} */
 
 .axis-label {
   stroke: var(--text-color-2);

@@ -123,7 +123,7 @@ d3.json(url)
     // Tooltip
     const tooltip = d3.select(".content").append("div").attr("id", "tooltip");
 
-    const showTooltip = (d) => {
+    const showTooltip = function (d) {
       const content = `<div>${months[d.month - 1]} ${d.year}</div><div>${(
         baseTemperature + d.variance
       ).toFixed(1)}&#8451;</div>`;
@@ -136,11 +136,17 @@ d3.json(url)
         .transition()
         .duration(200)
         .style("opacity", 0.9);
+
+      d3.select(this).transition().duration(100).style("fill", "#2b8cbe");
     };
 
     //--> Hide tooltip
-    const hideTooltip = () => {
+    const hideTooltip = function (d) {
       tooltip.transition().duration(200).style("opacity", 0);
+      d3.select(this)
+        .transition()
+        .duration(100)
+        .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)));
     };
 
     // Heatmap
@@ -149,6 +155,7 @@ d3.json(url)
       .data(data.monthlyVariance)
       .enter()
       .append("rect")
+      .attr("class", "cell")
       .attr("width", cellWidth)
       .attr("height", cellHeight)
       .attr("x", (d) => (d.year - minYear) * cellWidth)

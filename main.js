@@ -120,6 +120,9 @@ d3.json(url)
         `translate(${margin.left}, ${height + margin.top + margin.bottom / 3})`
       );
 
+    // Tooltip
+    const tooltip = d3.select(".content").append("div").attr("id", "tooltip");
+
     // Heatmap
     const heatMap = chart
       .selectAll("rect")

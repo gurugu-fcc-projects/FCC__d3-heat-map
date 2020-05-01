@@ -101,9 +101,9 @@ body {
   flex-direction: column;
   justify-content: center;
   position: absolute;
-  height: 90px;
+  /* height: 90px; */
   /* min-width: 180px; */
-  padding: 20px;
+  padding: 20px 20px;
   border-radius: 6px;
   color: var(--text-color);
   background-color: var(--bg-color-2);

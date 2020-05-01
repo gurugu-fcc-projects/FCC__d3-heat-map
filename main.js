@@ -90,7 +90,11 @@ d3.json(url)
       .tickSize(0)
       .tickPadding(10);
 
-    chart.append("g").attr("class", "axis").call(yAxis);
+    svg
+      .append("g")
+      .attr("class", "axis")
+      .call(yAxis)
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
     // X Scale & Axis
     const xScale = d3

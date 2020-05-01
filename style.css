@@ -124,3 +124,14 @@ body {
   font-weight: 400;
   fill: var(--text-color-2);
 }
+
+.legend-item {
+  cursor: pointer;
+  transition: 0.5s opacity;
+}
+
+.legend-item:hover {
+  /* stroke: var(--bg-color-2); */
+  opacity: 0.6;
+  /* stroke-width: 2px; */
+}

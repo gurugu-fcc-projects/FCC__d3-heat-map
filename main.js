@@ -175,7 +175,7 @@ d3.json(url)
       .append("text")
       .attr("class", "legend-text")
       .attr("y", legendItemHeight * 2)
-      .attr("x", (d, i) => legendItemWidth * i)
-      .text((d) => (d.lowerBound + minVariance + baseTemperature).toFixed(2));
+      .attr("x", (d, i) => legendItemWidth * i + 10)
+      .text((d) => (d.upperBound + minVariance + baseTemperature).toFixed(1));
   })
   .catch((error) => console.log(error));

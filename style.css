@@ -58,18 +58,18 @@ body {
   color: var(--text-color);
 }
 
-.dot {
+/* .dot {
   fill: var(--circle-color);
   cursor: pointer;
   opacity: 0.7;
   transition: fill 0.5s;
-}
+} */
 
-.dot.doping {
+/* .dot.doping {
   fill: var(--circle-color-doping);
   cursor: pointer;
   transition: fill 0.5s;
-}
+} */
 
 .dot:hover {
   fill: var(--circle-color-hover);
@@ -119,5 +119,7 @@ body {
 } */
 
 .legend-text {
-  fill: var(--text-color);
+  font-size: 12px;
+  font-weight: 400;
+  fill: var(--text-color-2);
 }

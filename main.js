@@ -138,6 +138,11 @@ d3.json(url)
         .style("opacity", 0.9);
 
       d3.select(this).transition().duration(100).style("fill", "#2b8cbe");
+      // d3.select(this)
+      //   .transition()
+      //   .duration(100)
+      //   .style("stroke", "rgb(44, 44, 44)")
+      //   .style("stroke-width", "3px");
     };
 
     //--> Hide tooltip
@@ -147,6 +152,7 @@ d3.json(url)
         .transition()
         .duration(100)
         .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)));
+      // .style("stroke", "none");
     };
 
     // Heatmap

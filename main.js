@@ -105,11 +105,14 @@ d3.json(url)
       .tickSize(0)
       .tickPadding(10);
 
-    chart
+    svg
       .append("g")
       .attr("class", "axis")
       .call(xAxis)
-      .attr("transform", `translate(0, ${height + margin.top / 2})`);
+      .attr(
+        "transform",
+        `translate(${margin.left}, ${height + margin.top + margin.bottom / 3})`
+      );
 
     // Heatmap
     const heatMap = chart
@@ -166,6 +169,7 @@ d3.json(url)
       .data(categories)
       .enter()
       .append("text")
+      .attr("class", "legend-text")
       .attr("y", legendItemHeight * 2)
       .attr("x", (d, i) => legendItemWidth * i)
       .text((d) => (d.lowerBound + minVariance + baseTemperature).toFixed(2));

@@ -123,6 +123,26 @@ d3.json(url)
     // Tooltip
     const tooltip = d3.select(".content").append("div").attr("id", "tooltip");
 
+    const showTooltip = (d) => {
+      const content = `<div>Date: ${d.year}/${d.month}</div><div>Temp: ${(
+        baseTemperature + d.variance
+      ).toFixed(1)}&#8451;</div>`;
+
+      tooltip
+        .html(content)
+        .style("left", `${d3.event.pageX + 15}px`)
+        .style("top", `${d3.event.pageY - 28}px`)
+        .attr("data-year", d["Year"])
+        .transition()
+        .duration(200)
+        .style("opacity", 0.9);
+    };
+
+    //--> Hide tooltip
+    const hideTooltip = () => {
+      tooltip.transition().duration(200).style("opacity", 0);
+    };
+
     // Heatmap
     const heatMap = chart
       .selectAll("rect")
@@ -135,7 +155,9 @@ d3.json(url)
       .attr("y", (d) => (d.month - 1) * cellHeight)
       .attr("rx", 4)
       .attr("ry", 4)
-      .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)));
+      .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)))
+      .on("mouseover", showTooltip)
+      .on("mouseout", hideTooltip);
 
     // Legend
     const legend = svg

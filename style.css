@@ -102,13 +102,13 @@ body {
   justify-content: center;
   position: absolute;
   height: 90px;
-  min-width: 180px;
+  /* min-width: 180px; */
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 6px;
   color: var(--text-color);
   background-color: var(--bg-color-2);
   pointer-events: none;
-  opacity: 0.9;
+  opacity: 0;
 }
 
 /* .legend-doping {

@@ -124,7 +124,7 @@ d3.json(url)
     const tooltip = d3.select(".content").append("div").attr("id", "tooltip");
 
     const showTooltip = (d) => {
-      const content = `<div>Date: ${d.year}/${d.month}</div><div>Temp: ${(
+      const content = `<div>${months[d.month - 1]} ${d.year}</div><div>${(
         baseTemperature + d.variance
       ).toFixed(1)}&#8451;</div>`;
 

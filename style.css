@@ -110,13 +110,13 @@ body {
   pointer-events: none;
 }
 
-.legend-doping {
+/* .legend-doping {
   fill: var(--circle-color-doping);
 }
 
 .legend-no-doping {
   fill: var(--circle-color);
-}
+} */
 
 .legend-text {
   fill: var(--text-color);

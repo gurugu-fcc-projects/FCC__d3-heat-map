@@ -70,7 +70,9 @@ d3.json(url)
       d3.extent(data.monthlyVariance, (d) => d.variance + Math.abs(minVariance))
     );
     const colorScale = d3
-      .scaleSequential(interpolateGnBu())
+      // .scaleSequential(interpolateGnBu())
+      .scaleSequential(d3.interpolateYlOrRd)
+      // .scaleSequential(d3.interpolatePRGn)
       .domain(
         d3.extent(
           data.monthlyVariance,

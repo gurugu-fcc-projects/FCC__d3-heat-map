@@ -158,10 +158,10 @@ d3.json(url)
     };
 
     // Heatmap creation function
-    const drawHeatmap = () => {
+    const drawHeatmap = (data) => {
       chart
         .selectAll("rect")
-        .data(normalizedData, (d) => d.date)
+        .data(data, (d) => d.date)
         .join("rect")
         .attr("class", "cell")
         .attr("width", cellWidth)
@@ -170,13 +170,19 @@ d3.json(url)
         .attr("y", (d) => Math.abs(d.month - 12) * cellHeight)
         .attr("rx", 4)
         .attr("ry", 4)
-        .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)))
+        .style("fill", (d) => {
+          if (d.selected) {
+            return colorScale(d.variance + Math.abs(minVariance));
+          } else {
+            return "rgb(65, 61, 61)";
+          }
+        })
         .on("mouseover", showTooltip)
         .on("mouseout", hideTooltip);
     };
 
     // Initial heatmap drawing
-    drawHeatmap();
+    drawHeatmap(normalizedData);
 
     // Legend
     const legend = svg
@@ -234,25 +240,7 @@ d3.json(url)
         this.classList.add("selected");
       }
 
-      chart
-        .selectAll("rect")
-        .data(selectedData)
-        .attr("class", "cell")
-        .attr("width", cellWidth)
-        .attr("height", cellHeight)
-        .attr("x", (d) => (d.year - minYear) * cellWidth)
-        .attr("y", (d) => Math.abs(d.month - 12) * cellHeight)
-        .attr("rx", 4)
-        .attr("ry", 4)
-        .style("fill", (d) => {
-          if (d.selected) {
-            return colorScale(d.variance + Math.abs(minVariance));
-          } else {
-            return "rgb(65, 61, 61)";
-          }
-        })
-        .on("mouseover", showTooltip)
-        .on("mouseout", hideTooltip);
+      drawHeatmap(selectedData);
     };
 
     // Legend - graph

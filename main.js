@@ -21,8 +21,6 @@ const months = [
 // Load & display data
 d3.json(url)
   .then((data) => {
-    console.log(data);
-
     // Dimensions
     const margin = { top: 40, right: 20, bottom: 120, left: 70 };
     const cellWidth = 5;
@@ -35,10 +33,6 @@ d3.json(url)
     const minVariance = d3.min(data.monthlyVariance, (d) => d.variance);
     const maxMaxVariance = maxVariance + Math.abs(minVariance);
     const baseTemperature = data.baseTemperature;
-
-    console.log("maxVariance:", maxVariance);
-    console.log("minVariance:", minVariance);
-    console.log("maxMaxVariance:", maxMaxVariance);
 
     // SVG & Chart
     const svg = d3
@@ -65,10 +59,7 @@ d3.json(url)
         "#084081",
       ]);
     };
-    console.log(
-      "colorScale min-max:",
-      d3.extent(data.monthlyVariance, (d) => d.variance + Math.abs(minVariance))
-    );
+
     const colorScale = d3
       // .scaleSequential(interpolateGnBu())
       .scaleSequential(d3.interpolateYlOrRd)
@@ -202,19 +193,37 @@ d3.json(url)
       };
     });
 
-    const toggle = (legend) => {
+    // Legend toggle fn
+    const toggle = function (legend) {
       const { upperBound, lowerBound, selected } = legend;
+      let selectedData;
 
-      const selectedData = data.monthlyVariance.map((dataItem) => {
-        if (
-          dataItem.variance >= (lowerBound + minVariance).toFixed(3) &&
-          dataItem.variance <= (upperBound + minVariance).toFixed(3)
-        ) {
+      const legendEls = document.querySelectorAll(".legend-item");
+
+      if (this.classList.contains("selected")) {
+        selectedData = data.monthlyVariance.map((dataItem) => {
           return { ...dataItem, selected: true };
-        } else {
-          return { ...dataItem, selected: false };
-        }
-      });
+        });
+
+        this.classList.remove("selected");
+      } else {
+        selectedData = data.monthlyVariance.map((dataItem) => {
+          if (
+            dataItem.variance >= (lowerBound + minVariance).toFixed(3) &&
+            dataItem.variance <= (upperBound + minVariance).toFixed(3)
+          ) {
+            return { ...dataItem, selected: true };
+          } else {
+            return { ...dataItem, selected: false };
+          }
+        });
+
+        legendEls.forEach((legendEl) => {
+          legendEl.classList.remove("selected");
+        });
+
+        this.classList.add("selected");
+      }
 
       chart
         .selectAll("rect")

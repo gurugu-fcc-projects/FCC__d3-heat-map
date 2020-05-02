@@ -39,7 +39,7 @@ d3.json(url)
       selected: true,
     }));
 
-    console.log(normalizedData);
+    // console.log(normalizedData);
     // SVG & Chart
     const svg = d3
       .select(".content")
@@ -157,21 +157,26 @@ d3.json(url)
         .style("stroke", "none");
     };
 
-    // Heatmap
-    const heatMap = chart
-      .selectAll("rect")
-      .data(data.monthlyVariance)
-      .join("rect")
-      .attr("class", "cell")
-      .attr("width", cellWidth)
-      .attr("height", cellHeight)
-      .attr("x", (d) => (d.year - minYear) * cellWidth)
-      .attr("y", (d) => Math.abs(d.month - 12) * cellHeight)
-      .attr("rx", 4)
-      .attr("ry", 4)
-      .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)))
-      .on("mouseover", showTooltip)
-      .on("mouseout", hideTooltip);
+    // Heatmap creation function
+    const drawHeatmap = () => {
+      chart
+        .selectAll("rect")
+        .data(data.monthlyVariance)
+        .join("rect")
+        .attr("class", "cell")
+        .attr("width", cellWidth)
+        .attr("height", cellHeight)
+        .attr("x", (d) => (d.year - minYear) * cellWidth)
+        .attr("y", (d) => Math.abs(d.month - 12) * cellHeight)
+        .attr("rx", 4)
+        .attr("ry", 4)
+        .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)))
+        .on("mouseover", showTooltip)
+        .on("mouseout", hideTooltip);
+    };
+
+    // Initial heatmap drawing
+    drawHeatmap();
 
     // Legend
     const legend = svg

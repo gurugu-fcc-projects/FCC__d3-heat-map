@@ -205,32 +205,37 @@ d3.json(url)
     const toggle = (legend) => {
       const { upperBound, lowerBound, selected } = legend;
 
-      const selectedData = data.monthlyVariance.filter((dataItem) => {
-        return (
+      const selectedData = data.monthlyVariance.map((dataItem) => {
+        if (
           dataItem.variance >= (lowerBound + minVariance).toFixed(3) &&
           dataItem.variance <= (upperBound + minVariance).toFixed(3)
-        );
+        ) {
+          return { ...dataItem, selected: true };
+        } else {
+          return { ...dataItem, selected: false };
+        }
       });
 
-      console.log(selectedData);
       chart
-        .data(selectedData)
         .selectAll("rect")
-        .data(
-          (d) => d.variance,
-          (d) => d.year
-        )
-        .transition()
-        .duration(500)
-        .attr("fill", (d) =>
-          legend.selected
-            ? colorScale(d.variance + Math.abs(minVariance))
-            : "white"
-        );
-      console.log("toggling");
+        .data(selectedData)
+        .attr("class", "cell")
+        .attr("width", cellWidth)
+        .attr("height", cellHeight)
+        .attr("x", (d) => (d.year - minYear) * cellWidth)
+        .attr("y", (d) => Math.abs(d.month - 12) * cellHeight)
+        .attr("rx", 4)
+        .attr("ry", 4)
+        .style("fill", (d) => {
+          if (d.selected) {
+            return colorScale(d.variance + Math.abs(minVariance));
+          } else {
+            return "rgb(65, 61, 61)";
+          }
+        })
+        .on("mouseover", showTooltip)
+        .on("mouseout", hideTooltip);
     };
-
-    console.log(categories);
 
     // Legend - graph
     const legendMap = legend

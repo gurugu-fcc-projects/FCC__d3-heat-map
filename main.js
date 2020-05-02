@@ -164,8 +164,9 @@ d3.json(url)
     const heatMap = chart
       .selectAll("rect")
       .data(data.monthlyVariance)
-      .enter()
-      .append("rect")
+      // .enter()
+      // .append("rect")
+      .join("rect")
       .attr("class", "cell")
       .attr("width", cellWidth)
       .attr("height", cellHeight)
@@ -205,9 +206,27 @@ d3.json(url)
       const { upperBound, lowerBound, selected } = legend;
 
       const selectedData = data.monthlyVariance.filter((dataItem) => {
-        dataItem.variance > lowerBound;
+        return (
+          dataItem.variance >= (lowerBound + minVariance).toFixed(3) &&
+          dataItem.variance <= (upperBound + minVariance).toFixed(3)
+        );
       });
 
+      console.log(selectedData);
+      chart
+        .data(selectedData)
+        .selectAll("rect")
+        .data(
+          (d) => d.variance,
+          (d) => d.year
+        )
+        .transition()
+        .duration(500)
+        .attr("fill", (d) =>
+          legend.selected
+            ? colorScale(d.variance + Math.abs(minVariance))
+            : "white"
+        );
       console.log("toggling");
     };
 

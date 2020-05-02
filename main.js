@@ -161,7 +161,7 @@ d3.json(url)
     const drawHeatmap = () => {
       chart
         .selectAll("rect")
-        .data(data.monthlyVariance)
+        .data(normalizedData, (d) => d.date)
         .join("rect")
         .attr("class", "cell")
         .attr("width", cellWidth)

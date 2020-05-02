@@ -33,7 +33,13 @@ d3.json(url)
     const minVariance = d3.min(data.monthlyVariance, (d) => d.variance);
     const maxMaxVariance = maxVariance + Math.abs(minVariance);
     const baseTemperature = data.baseTemperature;
+    const normalizedData = data.monthlyVariance.map((dataItem) => ({
+      ...dataItem,
+      date: `${dataItem.year}-${dataItem.month}`,
+      selected: true,
+    }));
 
+    console.log(normalizedData);
     // SVG & Chart
     const svg = d3
       .select(".content")
@@ -155,8 +161,6 @@ d3.json(url)
     const heatMap = chart
       .selectAll("rect")
       .data(data.monthlyVariance)
-      // .enter()
-      // .append("rect")
       .join("rect")
       .attr("class", "cell")
       .attr("width", cellWidth)

@@ -262,21 +262,27 @@ d3.json(url)
       let selectedData;
 
       if (this.classList.contains("selected")) {
-        selectedData = normalizedData.map((dataItem) => {
-          return { ...dataItem, selected: true };
-        });
-
+        // selectedData = normalizedData.map((dataItem) => {
+        //   return { ...dataItem, selected: true };
+        // });
+        selectedData = normalizedData;
         this.classList.remove("selected");
       } else {
-        selectedData = normalizedData.map((dataItem) => {
-          if (
+        // selectedData = normalizedData.map((dataItem) => {
+        //   if (
+        //     dataItem.variance >= (lowerBound + minVariance).toFixed(3) &&
+        //     dataItem.variance <= (upperBound + minVariance).toFixed(3)
+        //   ) {
+        //     return { ...dataItem, selected: true };
+        //   } else {
+        //     return { ...dataItem, selected: false };
+        //   }
+        // });
+        selectedData = normalizedData.filter((dataItem) => {
+          return (
             dataItem.variance >= (lowerBound + minVariance).toFixed(3) &&
             dataItem.variance <= (upperBound + minVariance).toFixed(3)
-          ) {
-            return { ...dataItem, selected: true };
-          } else {
-            return { ...dataItem, selected: false };
-          }
+          );
         });
 
         const selectedLegendItem = document.querySelector(

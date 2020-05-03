@@ -211,9 +211,8 @@ d3.json(url)
     // Legend toggle fn
     const toggle = function (legend) {
       const { upperBound, lowerBound, selected } = legend;
-      let selectedData;
-
       const legendEls = document.querySelectorAll(".legend-item");
+      let selectedData;
 
       if (this.classList.contains("selected")) {
         selectedData = data.monthlyVariance.map((dataItem) => {

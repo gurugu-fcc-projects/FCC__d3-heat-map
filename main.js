@@ -168,10 +168,39 @@ d3.json(url)
 
     //--> Heatmap creation function
     const drawHeatmap = (data) => {
+      const t = svg.transition().duration(750);
+
       chart
         .selectAll("rect")
         .data(data, (d) => d.date)
         .join("rect")
+        // .join(
+        //   (enter) =>
+        //     enter
+        //       .append("rect")
+        //       .style("fill", "rgb(44, 44, 44)")
+        //       .call((enter) => enter.transition(t))
+        //       .style("fill", (d) =>
+        //         colorScale(d.variance + Math.abs(minVariance))
+        //       )
+        //       .attr("class", "cell")
+        //       .attr("width", cellWidth)
+        //       .attr("height", cellHeight)
+        //       .attr("x", (d) => (d.year - minYear) * cellWidth)
+        //       .attr("y", (d) => Math.abs(d.month - 12) * cellHeight)
+        //       .attr("rx", 4)
+        //       .attr("ry", 4)
+        //       .on("mouseover", showTooltip)
+        //       .on("mouseout", hideTooltip),
+        //   (exit) =>
+        //     exit
+        //       .style("fill", (d) =>
+        //         colorScale(d.variance + Math.abs(minVariance))
+        //       )
+        //       .call((exit) => exit.transition(t))
+        //       .style("fill", "rgb(44, 44, 44)")
+        //       .remove()
+        // );
         .attr("class", "cell")
         .attr("width", cellWidth)
         .attr("height", cellHeight)
@@ -179,15 +208,25 @@ d3.json(url)
         .attr("y", (d) => Math.abs(d.month - 12) * cellHeight)
         .attr("rx", 4)
         .attr("ry", 4)
+        .on("mouseover", showTooltip)
+        .on("mouseout", hideTooltip)
         .style("fill", (d) => {
           if (d.selected) {
             return colorScale(d.variance + Math.abs(minVariance));
           } else {
-            return "rgb(65, 61, 61)";
+            return "rgb(44, 44, 44)";
           }
-        })
-        .on("mouseover", showTooltip)
-        .on("mouseout", hideTooltip);
+        });
+      // .transition()
+      // .duration(2500)
+      // .style("opacity", (d) => {
+      //   if (d.selected) {
+      //     return 1;
+      //   } else {
+      //     return 0;
+      //   }
+      // })
+      // .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)));
     };
 
     //--> Initial heatmap drawing
@@ -223,13 +262,13 @@ d3.json(url)
       let selectedData;
 
       if (this.classList.contains("selected")) {
-        selectedData = data.monthlyVariance.map((dataItem) => {
+        selectedData = normalizedData.map((dataItem) => {
           return { ...dataItem, selected: true };
         });
 
         this.classList.remove("selected");
       } else {
-        selectedData = data.monthlyVariance.map((dataItem) => {
+        selectedData = normalizedData.map((dataItem) => {
           if (
             dataItem.variance >= (lowerBound + minVariance).toFixed(3) &&
             dataItem.variance <= (upperBound + minVariance).toFixed(3)

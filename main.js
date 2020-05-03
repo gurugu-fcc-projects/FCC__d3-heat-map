@@ -211,7 +211,7 @@ d3.json(url)
     // Legend toggle fn
     const toggle = function (legend) {
       const { upperBound, lowerBound, selected } = legend;
-      const legendEls = document.querySelectorAll(".legend-item");
+      // const legendEls = document.querySelectorAll(".legend-item");
       let selectedData;
 
       if (this.classList.contains("selected")) {
@@ -232,9 +232,16 @@ d3.json(url)
           }
         });
 
-        legendEls.forEach((legendEl) => {
-          legendEl.classList.remove("selected");
-        });
+        // legendEls.forEach((legendEl) => {
+        //   legendEl.classList.remove("selected");
+        // });
+        const selectedLegendItem = document.querySelector(
+          ".legend-item.selected"
+        );
+
+        if (selectedLegendItem) {
+          selectedLegendItem.classList.remove("selected");
+        }
 
         this.classList.add("selected");
       }

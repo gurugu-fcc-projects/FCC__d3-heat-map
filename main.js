@@ -122,48 +122,48 @@ d3.json(url)
 
     //--> Show tooltip
     const showTooltip = function (d) {
-      if (d.selected) {
-        const content = `<div>${months[d.month - 1]} ${d.year}</div><div>${(
-          baseTemperature + d.variance
-        ).toFixed(1)}&#8451;</div>`;
+      // if (d.selected) {
+      const content = `<div>${months[d.month - 1]} ${d.year}</div><div>${(
+        baseTemperature + d.variance
+      ).toFixed(1)}&#8451;</div>`;
 
-        tooltip
-          .html(content)
-          .style("left", `${d3.event.pageX + 15}px`)
-          .style("top", `${d3.event.pageY - 28}px`)
-          .attr("data-year", d["Year"])
-          .transition()
-          .duration(200)
-          .style("opacity", 0.9);
+      tooltip
+        .html(content)
+        .style("left", `${d3.event.pageX + 15}px`)
+        .style("top", `${d3.event.pageY - 28}px`)
+        .attr("data-year", d["Year"])
+        .transition()
+        .duration(200)
+        .style("opacity", 0.9);
 
-        d3.select(this)
-          .transition()
-          .duration(100)
-          // .style("fill", "#2b8cbe")
-          .style("fill", "rgb(44, 44, 44)")
-          .style("stroke", "#fff");
-        // d3.select(this)
-        //   .transition()
-        //   .duration(100)
-        //   .style("stroke", "rgb(44, 44, 44)")
-        //   .style("stroke-width", "3px");
-      } else {
-        return;
-      }
+      d3.select(this)
+        .transition()
+        .duration(100)
+        // .style("fill", "#2b8cbe")
+        .style("fill", "rgb(44, 44, 44)")
+        .style("stroke", "#fff");
+      // d3.select(this)
+      //   .transition()
+      //   .duration(100)
+      //   .style("stroke", "rgb(44, 44, 44)")
+      //   .style("stroke-width", "3px");
+      // } else {
+      //   return;
+      // }
     };
 
     //--> Hide tooltip
     const hideTooltip = function (d) {
-      if (d.selected) {
-        tooltip.transition().duration(200).style("opacity", 0);
-        d3.select(this)
-          .transition()
-          .duration(100)
-          .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)))
-          .style("stroke", "none");
-      } else {
-        return;
-      }
+      // if (d.selected) {
+      tooltip.transition().duration(200).style("opacity", 0);
+      d3.select(this)
+        .transition()
+        .duration(100)
+        .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)))
+        .style("stroke", "none");
+      // } else {
+      //   return;
+      // }
     };
 
     //--> Heatmap creation function

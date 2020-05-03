@@ -141,6 +141,7 @@ body {
 
 .legend-item.selected {
   opacity: 0.7;
+  stroke: #fff;
 }
 
 .legend-item:hover {

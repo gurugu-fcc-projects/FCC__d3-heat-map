@@ -1,8 +1,8 @@
-// Main data
+//--> Main data
 const url =
   "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json";
 
-// Helpers
+//--> Helpers
 const months = [
   "Jan",
   "Feb",
@@ -18,10 +18,10 @@ const months = [
   "Dec",
 ];
 
-// Load & display data
+//--> Load & display data
 d3.json(url)
   .then((data) => {
-    // Dimensions
+    //--> Dimensions
     const margin = { top: 40, right: 20, bottom: 120, left: 70 };
     const cellWidth = 5;
     const cellHeight = 40;
@@ -40,7 +40,7 @@ d3.json(url)
     }));
 
     // console.log(normalizedData);
-    // SVG & Chart
+    //--> SVG & Chart
     const svg = d3
       .select(".content")
       .append("svg")
@@ -51,7 +51,7 @@ d3.json(url)
       .append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    // Color Scale
+    //--> Color Scale
     const interpolateGnBu = () => {
       return d3.interpolateRgbBasis([
         "#f7fcf0",
@@ -77,7 +77,7 @@ d3.json(url)
         )
       );
 
-    // Y Scale & Axis
+    //--> Y Scale & Axis
     const yScale = d3
       .scaleBand()
       .domain(months)
@@ -95,7 +95,7 @@ d3.json(url)
       .call(yAxis)
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    // X Scale & Axis
+    //--> X Scale & Axis
     const xScale = d3
       .scaleBand()
       .domain(data.monthlyVariance.map((d) => d.year))
@@ -117,9 +117,10 @@ d3.json(url)
         `translate(${margin.left}, ${height + margin.top + margin.bottom / 3})`
       );
 
-    // Tooltip
+    //--> Tooltip
     const tooltip = d3.select(".content").append("div").attr("id", "tooltip");
 
+    //--> Show tooltip
     const showTooltip = function (d) {
       const content = `<div>${months[d.month - 1]} ${d.year}</div><div>${(
         baseTemperature + d.variance
@@ -157,7 +158,7 @@ d3.json(url)
         .style("stroke", "none");
     };
 
-    // Heatmap creation function
+    //--> Heatmap creation function
     const drawHeatmap = (data) => {
       chart
         .selectAll("rect")
@@ -181,10 +182,10 @@ d3.json(url)
         .on("mouseout", hideTooltip);
     };
 
-    // Initial heatmap drawing
+    //--> Initial heatmap drawing
     drawHeatmap(normalizedData);
 
-    // Legend
+    //--> Legend
     const legend = svg
       .append("g")
       .attr(
@@ -208,7 +209,7 @@ d3.json(url)
       };
     });
 
-    // Legend toggle fn
+    //--> Legend toggle fn
     const toggle = function (legend) {
       const { upperBound, lowerBound, selected } = legend;
       let selectedData;
@@ -245,7 +246,7 @@ d3.json(url)
       drawHeatmap(selectedData);
     };
 
-    // Legend - graph
+    //--> Legend - graph
     const legendMap = legend
       .selectAll("rect")
       .data(categories)
@@ -258,7 +259,7 @@ d3.json(url)
       .attr("fill", (d) => d.color)
       .on("click", toggle);
 
-    // Legend -- text
+    //--> Legend -- text
     const legendText = legend
       .selectAll("text")
       .data(categories)

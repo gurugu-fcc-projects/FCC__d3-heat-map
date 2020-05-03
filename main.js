@@ -122,7 +122,6 @@ d3.json(url)
 
     //--> Show tooltip
     const showTooltip = function (d) {
-      // if (d.selected) {
       const content = `<div>${months[d.month - 1]} ${d.year}</div><div>${(
         baseTemperature + d.variance
       ).toFixed(1)}&#8451;</div>`;
@@ -139,37 +138,24 @@ d3.json(url)
       d3.select(this)
         .transition()
         .duration(100)
-        // .style("fill", "#2b8cbe")
         .style("fill", "rgb(44, 44, 44)")
         .style("stroke", "#fff");
-      // d3.select(this)
-      //   .transition()
-      //   .duration(100)
-      //   .style("stroke", "rgb(44, 44, 44)")
-      //   .style("stroke-width", "3px");
-      // } else {
-      //   return;
-      // }
     };
 
     //--> Hide tooltip
     const hideTooltip = function (d) {
-      // if (d.selected) {
       tooltip.transition().duration(200).style("opacity", 0);
       d3.select(this)
         .transition()
         .duration(100)
         .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)))
         .style("stroke", "none");
-      // } else {
-      //   return;
-      // }
     };
 
     //--> Heatmap creation function
     const drawHeatmap = (data) => {
       const t = svg.transition().duration(750);
-
+      console.log(data);
       chart
         .selectAll("rect")
         .data(data, (d) => d.date)
@@ -178,29 +164,15 @@ d3.json(url)
         //   (enter) =>
         //     enter
         //       .append("rect")
-        //       .style("fill", "rgb(44, 44, 44)")
+        //       .style("opacity", 0)
         //       .call((enter) => enter.transition(t))
-        //       .style("fill", (d) =>
-        //         colorScale(d.variance + Math.abs(minVariance))
-        //       )
-        //       .attr("class", "cell")
-        //       .attr("width", cellWidth)
-        //       .attr("height", cellHeight)
-        //       .attr("x", (d) => (d.year - minYear) * cellWidth)
-        //       .attr("y", (d) => Math.abs(d.month - 12) * cellHeight)
-        //       .attr("rx", 4)
-        //       .attr("ry", 4)
-        //       .on("mouseover", showTooltip)
-        //       .on("mouseout", hideTooltip),
+        //       .style("opacity", 1),
         //   (exit) =>
         //     exit
-        //       .style("fill", (d) =>
-        //         colorScale(d.variance + Math.abs(minVariance))
-        //       )
         //       .call((exit) => exit.transition(t))
-        //       .style("fill", "rgb(44, 44, 44)")
+        //       .style("opacity", 0)
         //       .remove()
-        // );
+        // )
         .attr("class", "cell")
         .attr("width", cellWidth)
         .attr("height", cellHeight)
@@ -208,25 +180,9 @@ d3.json(url)
         .attr("y", (d) => Math.abs(d.month - 12) * cellHeight)
         .attr("rx", 4)
         .attr("ry", 4)
+        .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)))
         .on("mouseover", showTooltip)
-        .on("mouseout", hideTooltip)
-        .style("fill", (d) => {
-          if (d.selected) {
-            return colorScale(d.variance + Math.abs(minVariance));
-          } else {
-            return "rgb(44, 44, 44)";
-          }
-        });
-      // .transition()
-      // .duration(2500)
-      // .style("opacity", (d) => {
-      //   if (d.selected) {
-      //     return 1;
-      //   } else {
-      //     return 0;
-      //   }
-      // })
-      // .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)));
+        .on("mouseout", hideTooltip);
     };
 
     //--> Initial heatmap drawing
@@ -252,32 +208,18 @@ d3.json(url)
         upperBound,
         lowerBound,
         color: colorScale(upperBound),
-        selected: true,
       };
     });
 
     //--> Legend toggle fn
     const toggle = function (legend) {
-      const { upperBound, lowerBound, selected } = legend;
+      const { upperBound, lowerBound } = legend;
       let selectedData;
 
       if (this.classList.contains("selected")) {
-        // selectedData = normalizedData.map((dataItem) => {
-        //   return { ...dataItem, selected: true };
-        // });
         selectedData = normalizedData;
         this.classList.remove("selected");
       } else {
-        // selectedData = normalizedData.map((dataItem) => {
-        //   if (
-        //     dataItem.variance >= (lowerBound + minVariance).toFixed(3) &&
-        //     dataItem.variance <= (upperBound + minVariance).toFixed(3)
-        //   ) {
-        //     return { ...dataItem, selected: true };
-        //   } else {
-        //     return { ...dataItem, selected: false };
-        //   }
-        // });
         selectedData = normalizedData.filter((dataItem) => {
           return (
             dataItem.variance >= (lowerBound + minVariance).toFixed(3) &&

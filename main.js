@@ -99,6 +99,7 @@ d3.json(url)
     svg
       .append("g")
       .attr("class", "axis")
+      .attr("id", "y-axis")
       .call(yAxis)
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 

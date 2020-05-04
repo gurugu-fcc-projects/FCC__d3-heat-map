@@ -4,18 +4,18 @@ const url =
 
 //--> Helpers
 const months = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
+  "January",
+  "February",
+  "March",
+  "April",
   "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 //--> Load & display data
@@ -216,6 +216,7 @@ d3.json(url)
     //--> Legend
     const legend = svg
       .append("g")
+      .attr("id", "legend")
       .attr(
         "transform",
         `translate(${margin.left}, ${height + margin.top * 3})`

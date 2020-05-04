@@ -139,7 +139,7 @@ d3.json(url)
         .html(content)
         .style("left", `${d3.event.pageX + 15}px`)
         .style("top", `${d3.event.pageY - 28}px`)
-        .attr("data-year", d["Year"])
+        .attr("data-year", d.year)
         .transition()
         .duration(200)
         .style("opacity", 0.9);

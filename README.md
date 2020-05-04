@@ -6,5 +6,4 @@ TODOs
 <!-- 2. Bug - deselected cells get selected again after a mouse over action -->
 <!-- 3. Finish improving drawHeatamp fn -->
 <!-- 4. Animate selected/deselected cells -->
-
-5. Accomplish all FCC requirements
+<!-- 5. Accomplish all FCC requirements -->

@@ -118,6 +118,7 @@ d3.json(url)
     svg
       .append("g")
       .attr("class", "axis")
+      .attr("id", "x-axis")
       .call(xAxis)
       .attr(
         "transform",

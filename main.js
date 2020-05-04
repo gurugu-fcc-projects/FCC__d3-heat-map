@@ -29,6 +29,7 @@ d3.json(url)
     const width = cellWidth * Math.ceil(data.monthlyVariance.length / 12);
 
     const minYear = d3.min(data.monthlyVariance, (d) => d.year);
+    const maxYear = d3.max(data.monthlyVariance, (d) => d.year);
     const maxVariance = d3.max(data.monthlyVariance, (d) => d.variance);
     const minVariance = d3.min(data.monthlyVariance, (d) => d.variance);
     const maxMaxVariance = maxVariance + Math.abs(minVariance);
@@ -39,7 +40,13 @@ d3.json(url)
       selected: true,
     }));
 
-    // console.log(normalizedData);
+    //--> Add description
+    const description = d3
+      .select("header")
+      .append("h3")
+      .text(`${minYear} - ${maxYear}: temperature change over time`)
+      .attr("id", "description");
+
     //--> SVG & Chart
     const svg = d3
       .select(".content")
@@ -52,19 +59,19 @@ d3.json(url)
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
     //--> Color Scale
-    const interpolateGnBu = () => {
-      return d3.interpolateRgbBasis([
-        "#f7fcf0",
-        "#e0f3db",
-        "#ccebc5",
-        "#a8ddb5",
-        "#7bccc4",
-        "#4eb3d3",
-        "#2b8cbe",
-        "#0868ac",
-        "#084081",
-      ]);
-    };
+    // const interpolateGnBu = () => {
+    //   return d3.interpolateRgbBasis([
+    //     "#f7fcf0",
+    //     "#e0f3db",
+    //     "#ccebc5",
+    //     "#a8ddb5",
+    //     "#7bccc4",
+    //     "#4eb3d3",
+    //     "#2b8cbe",
+    //     "#0868ac",
+    //     "#084081",
+    //   ]);
+    // };
 
     const colorScale = d3
       // .scaleSequential(interpolateGnBu())

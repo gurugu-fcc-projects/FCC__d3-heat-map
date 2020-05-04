@@ -1,8 +1,8 @@
-//--> Main data
+//--> Main data source
 const url =
   "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json";
 
-//--> Helpers
+//--> Month names
 const months = [
   "January",
   "February",
@@ -28,6 +28,7 @@ d3.json(url)
     const height = 600 - margin.top - margin.bottom;
     const width = cellWidth * Math.ceil(data.monthlyVariance.length / 12);
 
+    //--> Useful data
     const minYear = d3.min(data.monthlyVariance, (d) => d.year);
     const maxYear = d3.max(data.monthlyVariance, (d) => d.year);
     const maxVariance = d3.max(data.monthlyVariance, (d) => d.variance);
@@ -41,8 +42,7 @@ d3.json(url)
     }));
 
     //--> Add description
-    const description = d3
-      .select("header")
+    d3.select("header")
       .append("h3")
       .text(`${minYear} - ${maxYear}: temperature change over time`)
       .attr("id", "description");
@@ -58,25 +58,8 @@ d3.json(url)
       .append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    //--> Color Scale
-    // const interpolateGnBu = () => {
-    //   return d3.interpolateRgbBasis([
-    //     "#f7fcf0",
-    //     "#e0f3db",
-    //     "#ccebc5",
-    //     "#a8ddb5",
-    //     "#7bccc4",
-    //     "#4eb3d3",
-    //     "#2b8cbe",
-    //     "#0868ac",
-    //     "#084081",
-    //   ]);
-    // };
-
     const colorScale = d3
-      // .scaleSequential(interpolateGnBu())
       .scaleSequential(d3.interpolateYlOrRd)
-      // .scaleSequential(d3.interpolatePRGn)
       .domain(
         d3.extent(
           data.monthlyVariance,
@@ -129,7 +112,7 @@ d3.json(url)
     //--> Tooltip
     const tooltip = d3.select(".content").append("div").attr("id", "tooltip");
 
-    //--> Show tooltip
+    //--> Show tooltip function
     const showTooltip = function (d) {
       const content = `<div>${months[d.month - 1]} ${d.year}</div><div>${(
         baseTemperature + d.variance
@@ -151,7 +134,7 @@ d3.json(url)
         .style("stroke", "#fff");
     };
 
-    //--> Hide tooltip
+    //--> Hide tooltip function
     const hideTooltip = function (d) {
       tooltip.transition().duration(200).style("opacity", 0);
       d3.select(this)
@@ -163,34 +146,13 @@ d3.json(url)
 
     //--> Heatmap creation function
     const drawHeatmap = (data) => {
-      // const t = svg.transition().duration(750);
-      // console.log(data);
       chart
         .selectAll("rect")
         .data(data, (d) => d.date)
-        // .join("rect")
         .join(
-          (enter) =>
-            enter
-              .append("rect")
-              // .attr("stroke", "blue")
-              // .transition()
-              // .duration(1000)
-              .style("opacity", 0),
-          // .call((enter) => enter.transition(t))
-          // .style("opacity", 1),
+          (enter) => enter.append("rect").style("opacity", 0),
           (update) => update,
-          // .call((update) => update.transition(t))
-          // .attr("stroke", "green"),
-          (exit) =>
-            exit
-              // .attr("stroke", "green")
-              // .call((exit) => exit.transition(t))
-              // .style("opacity", 0)
-              .transition()
-              .duration(400)
-              .style("opacity", 0)
-              .remove()
+          (exit) => exit.transition().duration(400).style("opacity", 0).remove()
         )
         .attr("class", "cell")
         .attr("width", cellWidth)
@@ -200,8 +162,6 @@ d3.json(url)
         .attr("data-month", (d) => d.month - 1)
         .attr("data-year", (d) => d.year)
         .attr("data-temp", (d) => d.variance)
-        // .attr("rx", 4)
-        // .attr("ry", 4)
         .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)))
         .on("mouseover", showTooltip)
         .on("mouseout", hideTooltip)
@@ -222,6 +182,7 @@ d3.json(url)
         `translate(${margin.left}, ${height + margin.top * 3})`
       );
 
+    //--> Legend useful data
     const categoriesCount = 10;
     const legendItemWidth = 40;
     const legendItemHeight = 15;
@@ -237,7 +198,7 @@ d3.json(url)
       };
     });
 
-    //--> Legend toggle fn
+    //--> Legend toggle function
     const toggle = function (legend) {
       const { upperBound, lowerBound } = legend;
       let selectedData;
@@ -268,7 +229,7 @@ d3.json(url)
     };
 
     //--> Legend - graph
-    const legendMap = legend
+    legend
       .selectAll("rect")
       .data(categories)
       .enter()
@@ -281,7 +242,7 @@ d3.json(url)
       .on("click", toggle);
 
     //--> Legend -- text
-    const legendText = legend
+    legend
       .selectAll("text")
       .data(categories)
       .enter()

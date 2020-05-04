@@ -154,7 +154,7 @@ d3.json(url)
 
     //--> Heatmap creation function
     const drawHeatmap = (data) => {
-      const t = svg.transition().duration(750);
+      // const t = svg.transition().duration(750);
       // console.log(data);
       chart
         .selectAll("rect")
@@ -164,13 +164,22 @@ d3.json(url)
           (enter) =>
             enter
               .append("rect")
-              .style("opacity", 0)
-              .call((enter) => enter.transition(t))
-              .style("opacity", 1),
+              // .attr("stroke", "blue")
+              // .transition()
+              // .duration(1000)
+              .style("opacity", 0),
+          // .call((enter) => enter.transition(t))
+          // .style("opacity", 1),
           (update) => update,
+          // .call((update) => update.transition(t))
+          // .attr("stroke", "green"),
           (exit) =>
             exit
-              .call((exit) => exit.transition(t))
+              // .attr("stroke", "green")
+              // .call((exit) => exit.transition(t))
+              // .style("opacity", 0)
+              .transition()
+              .duration(400)
               .style("opacity", 0)
               .remove()
         )
@@ -183,7 +192,10 @@ d3.json(url)
         .attr("ry", 4)
         .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)))
         .on("mouseover", showTooltip)
-        .on("mouseout", hideTooltip);
+        .on("mouseout", hideTooltip)
+        .transition()
+        .duration(400)
+        .style("opacity", 1);
     };
 
     //--> Initial heatmap drawing

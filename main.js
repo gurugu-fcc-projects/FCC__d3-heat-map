@@ -155,24 +155,25 @@ d3.json(url)
     //--> Heatmap creation function
     const drawHeatmap = (data) => {
       const t = svg.transition().duration(750);
-      console.log(data);
+      // console.log(data);
       chart
         .selectAll("rect")
         .data(data, (d) => d.date)
-        .join("rect")
-        // .join(
-        //   (enter) =>
-        //     enter
-        //       .append("rect")
-        //       .style("opacity", 0)
-        //       .call((enter) => enter.transition(t))
-        //       .style("opacity", 1),
-        //   (exit) =>
-        //     exit
-        //       .call((exit) => exit.transition(t))
-        //       .style("opacity", 0)
-        //       .remove()
-        // )
+        // .join("rect")
+        .join(
+          (enter) =>
+            enter
+              .append("rect")
+              .style("opacity", 0)
+              .call((enter) => enter.transition(t))
+              .style("opacity", 1),
+          (update) => update,
+          (exit) =>
+            exit
+              .call((exit) => exit.transition(t))
+              .style("opacity", 0)
+              .remove()
+        )
         .attr("class", "cell")
         .attr("width", cellWidth)
         .attr("height", cellHeight)

@@ -2,7 +2,8 @@
 
 ## Overview
 
-FreeCodeCamp Data Visualization Project. See project requirements at [this freecodecamp page](https://www.freecodecamp.org/learn/data-visualization/data-visualization-projects/visualize-data-with-a-heat-map)
+FreeCodeCamp Data Visualization Project.
+See project requirements at [this freecodecamp page](https://www.freecodecamp.org/learn/data-visualization/data-visualization-projects/visualize-data-with-a-heat-map)
 
 ## Demo
 

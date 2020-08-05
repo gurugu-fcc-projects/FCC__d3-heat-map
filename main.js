@@ -20,7 +20,7 @@ const months = [
 
 //--> Load & display data
 d3.json(url)
-  .then((data) => {
+  .then(data => {
     //--> Dimensions
     const margin = { top: 40, right: 20, bottom: 120, left: 70 };
     const cellWidth = 5;
@@ -29,13 +29,13 @@ d3.json(url)
     const width = cellWidth * Math.ceil(data.monthlyVariance.length / 12);
 
     //--> Useful data
-    const minYear = d3.min(data.monthlyVariance, (d) => d.year);
-    const maxYear = d3.max(data.monthlyVariance, (d) => d.year);
-    const maxVariance = d3.max(data.monthlyVariance, (d) => d.variance);
-    const minVariance = d3.min(data.monthlyVariance, (d) => d.variance);
+    const minYear = d3.min(data.monthlyVariance, d => d.year);
+    const maxYear = d3.max(data.monthlyVariance, d => d.year);
+    const maxVariance = d3.max(data.monthlyVariance, d => d.variance);
+    const minVariance = d3.min(data.monthlyVariance, d => d.variance);
     const maxMaxVariance = maxVariance + Math.abs(minVariance);
     const baseTemperature = data.baseTemperature;
-    const normalizedData = data.monthlyVariance.map((dataItem) => ({
+    const normalizedData = data.monthlyVariance.map(dataItem => ({
       ...dataItem,
       date: `${dataItem.year}-${dataItem.month}`,
       selected: true,
@@ -61,10 +61,7 @@ d3.json(url)
     const colorScale = d3
       .scaleSequential(d3.interpolateYlOrRd)
       .domain(
-        d3.extent(
-          data.monthlyVariance,
-          (d) => d.variance + Math.abs(minVariance)
-        )
+        d3.extent(data.monthlyVariance, d => d.variance + Math.abs(minVariance))
       );
 
     //--> Y Scale & Axis
@@ -75,7 +72,7 @@ d3.json(url)
 
     const yAxis = d3
       .axisLeft(yScale)
-      .tickFormat((d) => d)
+      .tickFormat(d => d)
       .tickSize(0)
       .tickPadding(10);
 
@@ -83,19 +80,19 @@ d3.json(url)
       .append("g")
       .attr("class", "axis")
       .attr("id", "y-axis")
-      .call(yAxis)
-      .attr("transform", `translate(${margin.left}, ${margin.top})`);
+      .attr("transform", `translate(${margin.left}, ${margin.top})`)
+      .call(yAxis);
 
     //--> X Scale & Axis
     const xScale = d3
       .scaleBand()
-      .domain(data.monthlyVariance.map((d) => d.year))
+      .domain(data.monthlyVariance.map(d => d.year))
       .range([0, width]);
 
     const xAxis = d3
       .axisBottom(xScale)
-      .tickValues(xScale.domain().filter((year) => year % 10 === 0))
-      .tickFormat((d) => String(d))
+      .tickValues(xScale.domain().filter(year => year % 10 === 0))
+      .tickFormat(d => String(d))
       .tickSize(0)
       .tickPadding(10);
 
@@ -103,11 +100,11 @@ d3.json(url)
       .append("g")
       .attr("class", "axis")
       .attr("id", "x-axis")
-      .call(xAxis)
       .attr(
         "transform",
         `translate(${margin.left}, ${height + margin.top + margin.bottom / 3})`
-      );
+      )
+      .call(xAxis);
 
     //--> Tooltip
     const tooltip = d3.select(".content").append("div").attr("id", "tooltip");
@@ -140,29 +137,29 @@ d3.json(url)
       d3.select(this)
         .transition()
         .duration(100)
-        .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)))
+        .style("fill", d => colorScale(d.variance + Math.abs(minVariance)))
         .style("stroke", "none");
     };
 
     //--> Heatmap creation function
-    const drawHeatmap = (data) => {
+    const drawHeatmap = data => {
       chart
         .selectAll("rect")
-        .data(data, (d) => d.date)
+        .data(data, d => d.date)
         .join(
-          (enter) => enter.append("rect").style("opacity", 0),
-          (update) => update,
-          (exit) => exit.transition().duration(400).style("opacity", 0).remove()
+          enter => enter.append("rect").style("opacity", 0),
+          update => update,
+          exit => exit.transition().duration(400).style("opacity", 0).remove()
         )
         .attr("class", "cell")
         .attr("width", cellWidth)
         .attr("height", cellHeight)
-        .attr("x", (d) => (d.year - minYear) * cellWidth)
-        .attr("y", (d) => Math.abs(d.month - 12) * cellHeight)
-        .attr("data-month", (d) => d.month - 1)
-        .attr("data-year", (d) => d.year)
-        .attr("data-temp", (d) => d.variance)
-        .style("fill", (d) => colorScale(d.variance + Math.abs(minVariance)))
+        .attr("x", d => (d.year - minYear) * cellWidth)
+        .attr("y", d => Math.abs(d.month - 12) * cellHeight)
+        .attr("data-month", d => d.month - 1)
+        .attr("data-year", d => d.year)
+        .attr("data-temp", d => d.variance)
+        .style("fill", d => colorScale(d.variance + Math.abs(minVariance)))
         .on("mouseover", showTooltip)
         .on("mouseout", hideTooltip)
         .transition()
@@ -207,7 +204,7 @@ d3.json(url)
         selectedData = normalizedData;
         this.classList.remove("selected");
       } else {
-        selectedData = normalizedData.filter((dataItem) => {
+        selectedData = normalizedData.filter(dataItem => {
           return (
             dataItem.variance >= (lowerBound + minVariance).toFixed(3) &&
             dataItem.variance <= (upperBound + minVariance).toFixed(3)
@@ -238,7 +235,7 @@ d3.json(url)
       .attr("width", legendItemWidth)
       .attr("height", legendItemHeight)
       .attr("x", (d, i) => legendItemWidth * i)
-      .attr("fill", (d) => d.color)
+      .attr("fill", d => d.color)
       .on("click", toggle);
 
     //--> Legend -- text
@@ -250,6 +247,6 @@ d3.json(url)
       .attr("class", "legend-text")
       .attr("y", legendItemHeight * 2)
       .attr("x", (d, i) => legendItemWidth * i + 10)
-      .text((d) => (d.upperBound + minVariance + baseTemperature).toFixed(1));
+      .text(d => (d.upperBound + minVariance + baseTemperature).toFixed(1));
   })
-  .catch((error) => console.log(error));
+  .catch(error => console.log(error));

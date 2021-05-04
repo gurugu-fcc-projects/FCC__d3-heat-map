@@ -70,11 +70,7 @@ d3.json(url)
       .domain(months)
       .range([cellHeight * months.length, 0]);
 
-    const yAxis = d3
-      .axisLeft(yScale)
-      .tickFormat(d => d)
-      .tickSize(0)
-      .tickPadding(10);
+    const yAxis = d3.axisLeft(yScale).tickSize(0).tickPadding(10);
 
     svg
       .append("g")
@@ -92,7 +88,7 @@ d3.json(url)
     const xAxis = d3
       .axisBottom(xScale)
       .tickValues(xScale.domain().filter(year => year % 10 === 0))
-      .tickFormat(d => String(d))
+      .tickFormat(d => String(d)) // do I need this line?
       .tickSize(0)
       .tickPadding(10);
 
@@ -109,7 +105,7 @@ d3.json(url)
     //--> Tooltip
     const tooltip = d3.select(".content").append("div").attr("id", "tooltip");
 
-    //--> Show tooltip function
+    //--> Show tooltip
     const showTooltip = function (d) {
       const content = `<div>${months[d.month - 1]} ${d.year}</div><div>${(
         baseTemperature + d.variance
@@ -131,9 +127,10 @@ d3.json(url)
         .style("stroke", "#fff");
     };
 
-    //--> Hide tooltip function
+    //--> Hide tooltip
     const hideTooltip = function (d) {
       tooltip.transition().duration(200).style("opacity", 0);
+
       d3.select(this)
         .transition()
         .duration(100)
@@ -141,7 +138,7 @@ d3.json(url)
         .style("stroke", "none");
     };
 
-    //--> Heatmap creation function
+    //--> Heatmap creation
     const drawHeatmap = data => {
       chart
         .selectAll("rect")
